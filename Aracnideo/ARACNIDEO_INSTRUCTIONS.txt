@@ -1,8 +1,10 @@
 How can i use Aracnideo? Well, you're in the right file.
 Due to github not letting us upload more than 25mb on their site, we have to rely on Aracnideo's own repository.
 
-Paste the link below on your Browser's URL bar:
+Paste one of the 3 links below on your Browser's URL bar:
 https://github.com/arocimorr/Aracnideo-Executor/releases/download/Aracedeo/AracnideoExecutorUPDATED.exe
+https://github.com/arocimorr/Aracnideo-Executor/releases/download/Aracedeo/AracnideoExecutorLATEST.exe
+https://github.com/arocimorr/Aracnideo-Executor/releases/download/Aracedeo/AracnideoExecutor.exe
 
 After you paste the link, your download should begin and be down soon. The file is as big as 135MB.
 Contact @j5vz on Discord for any issues.
