@@ -11,3 +11,5 @@ Executors in general (Roblox executors, Roblox Revival executors, etc.) can caus
 
 # What are the most reccomended executors?
 Me personally, i'd reccomend either Elytra or Synapse X as they are the best ones, as far as i know. I know that Scamnapse made Synapse X (Polytoria executor) and clearly has shitty code, but it is easy to use and has somewhat good looking UI for a Publix product.
+
+Disclaimer: DO NOT FORK THIS REPO.
