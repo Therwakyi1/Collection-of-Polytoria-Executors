@@ -58,7 +58,8 @@ namespace Alkaline
             }
 
             byte[] bytes = Encoding.Default.GetBytes(dllPath);
-            if (!WriteProcessMemory(hProcess, lpAddress, bytes, (uint)bytes.Length, out _))
+            uint bytesWritten;
+            if (!WriteProcessMemory(hProcess, lpAddress, bytes, (uint)bytes.Length, out bytesWritten))
             {
                 CloseHandle(hProcess);
                 return false;
