@@ -1,6 +1,10 @@
+// hi this is v2 also yes i added linux and macos support
+
 using System;
-using Microsoft.Win32;
+using System.IO;
 using System.Linq;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Monoxide
 {
@@ -9,59 +13,92 @@ namespace Monoxide
         static void Main(string[] args)
         {
             Console.Title = "Monoxide";
-            
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("[ MONOXIDE ]");
             Console.WriteLine("Monoxide HWID Spoofer by @j5vz");
             Console.WriteLine("Polytoria devs suck ass LOLOLOLOL");
             Console.ResetColor();
-
-            string newHwId = "{" + Guid.NewGuid().ToString() + "}";
-            string newMac = GenerateEntropy(12);
-
-            bool success = ApplyIdentity(newHwId, newMac);
-
-            if (success)
+            // ily colored terminal lines
+            
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("[+] HWID changed successfully.");
+                WinShift();
             }
-            else
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[!] Failed to write registry keys. Run monox Administrator.");
+                UnixShift("/etc/machine-id");
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                MacShift();
             }
 
-            Console.WriteLine("\nPress any key to exit...");
+            Console.WriteLine("\nPress any key to exit this window...");
             Console.ReadKey();
         }
 
-        static bool ApplyIdentity(string guid, string mac)
+        static void WinShift()
         {
             try
             {
-                var cryptography = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography", true);
-                cryptography?.SetValue("MachineGuid", Guid.NewGuid().ToString());
+                string g = Guid.NewGuid().ToString();
+                var crypto = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Cryptography", true);
+                crypto?.SetValue("MachineGuid", g);
 
-                var hwProfile = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\IDConfigDB\Hardware Profiles\0001", true);
-                hwProfile?.SetValue("HwProfileGuid", guid);
+                var hw = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\IDConfigDB\Hardware Profiles\0001", true);
+                hw?.SetValue("HwProfileGuid", "{" + g + "}");
 
-                var winNt = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", true);
-                winNt?.SetValue("ProductId", $"{GenerateEntropy(5)}-{GenerateEntropy(5)}-{GenerateEntropy(5)}-{GenerateEntropy(5)}");
+                var nt = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion", true);
+                nt?.SetValue("ProductId", $"{Entropy(5)}-{Entropy(5)}-{Entropy(5)}-{Entropy(5)}");
 
-                return true;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[+] Windows Registry ID(s) randomized.");
             }
             catch
             {
-                return false;
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[!] Run monox.cs as Administrator.");
             }
         }
 
-        static string GenerateEntropy(int len)
+        static void UnixShift(string path)
         {
-            const string pool = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|";
-            var rnd = new Random();
-            return new string(Enumerable.Repeat(pool, len).Select(s => s[rnd.Next(s.Length)]).ToArray());
+            try
+            {
+                string id = Entropy(32, true);
+                File.WriteAllText(path, id);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("[+] System HWID updated.");
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[!] Sudo permissions are required to run monox.");
+            }
+        }
+
+        static void MacShift()
+        {
+            try
+            {
+                string m = $"00:e0:4c:{Entropy(2, true)}:{Entropy(2, true)}:{Entropy(2, true)}";
+                var proc = new ProcessStartInfo("sudo", $"ifconfig en0 ether {m}") { CreateNoWindow = true };
+                Process.Start(proc)?.WaitForExit();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"[+] MacOS MAC set to {m}");
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[!] Mac HWID change failed.");
+            }
+        }
+
+        static string Entropy(int len, bool hex = false)
+        {
+            string p = hex ? "abcdef0123456789" : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+            var r = new Random();
+            return new string(Enumerable.Repeat(p, len).Select(s => s[r.Next(s.Length)]).ToArray());
         }
     }
 }
