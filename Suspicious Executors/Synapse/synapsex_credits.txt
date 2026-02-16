@@ -1,6 +1,6 @@
 SYNAPSE X CREDITS
-THANKS TO FOENEM LEAKING SYNAPSE X
 
 Scamnapse has made this exploit for Polytoria, and is known to larp as an Synapse dev. He is apart of Publix, a very toxic group.
+I don't know much else to say, but all I can say is that Synapse X opens browser pages (?) whenever it is opened, and runs proccesses on the background.
 
 @j5vz [Nexus] for additional info via discord.
