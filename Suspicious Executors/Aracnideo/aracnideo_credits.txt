@@ -1,5 +1,10 @@
 ARACNIDEO CREDITS
 THANKS TO NEXUS FOR PUTTING ARACNIDEO HERE
+ARACNIDEO MADE BY AROCIMOR & LEAKED SRC BY AROCIMOR
 
 Not much is known about Aracnideo as of February 14, 2026. Aracnideo is a pretty new executor, so not much is known. DM me below for me to add additional info.
+
+Update as of 02/26/2026:
+Aracnideo has officially been leaked by Arocimor due to him quitting the project and giving it to Palpomet. All of the Source Code leaks & UI files have been put into our repo.
+
 @j5vz [Nexus] for additional info via discord.
